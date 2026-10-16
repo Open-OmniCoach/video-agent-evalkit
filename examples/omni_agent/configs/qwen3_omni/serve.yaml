@@ -1,0 +1,36 @@
+manifest_path: ../../../../runs/services/qwen3_omni_agent.json
+working_dir: ../../../..
+host: 127.0.0.1
+advertise_host: 127.0.0.1
+startup_timeout: 1800
+terminate_timeout: 30
+models:
+  candidate:
+    backend: sglang
+    model: /path/to/qwen3-omni-agent-checkpoint
+    served_model_name: qwen3-omni-agent
+    adapter: vllm_multimodal
+    env:
+      OMP_NUM_THREADS: '1'
+      SGLANG_VLM_CACHE_SIZE_MB: '4096'
+    args:
+      - --tp-size
+      - '2'
+      - --dtype
+      - bfloat16
+      - --enable-multimodal
+      - --mem-fraction-static
+      - '0.70'
+      - --max-running-requests
+      - '3'
+      - --context-length
+      - '65536'
+      - --chunked-prefill-size
+      - '32768'
+      - --chat-template
+      - examples/omni_agent/templates/qwen3_omni.jinja
+      - --tool-call-parser
+      - hermes
+    replicas:
+      - gpus: [0, 1]
+        port: 8000

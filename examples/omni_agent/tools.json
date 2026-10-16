@@ -1,0 +1,250 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "description": "Return sampled visual frames, resized within 384x384 while preserving aspect ratio. level=coarse samples 1 FPS and level=detail samples 2 FPS. start/end must be absolute seconds with an s suffix. resolution defaults to default. resolution=high increases spatial resolution up to 1280 pixels per side without changing the time window or sampling FPS. Use high when the answer depends on fine spatial evidence such as small or distant objects, small text or symbols, subtle hand-object interactions, or the motion or state change of a small object. A resolution=high window must be at most 5 seconds.",
+      "name": "get_frames",
+      "parameters": {
+        "properties": {
+          "start": {
+            "pattern": "^\\d+(?:\\.\\d+)?s$",
+            "type": "string",
+            "description": "Absolute seconds with an s suffix."
+          },
+          "end": {
+            "pattern": "^\\d+(?:\\.\\d+)?s$",
+            "type": "string",
+            "description": "Absolute seconds with an s suffix."
+          },
+          "level": {
+            "enum": [
+              "coarse",
+              "detail"
+            ],
+            "type": "string"
+          },
+          "resolution": {
+            "default": "default",
+            "enum": [
+              "default",
+              "high"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "level"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "description": "Return continuous audio. start/end must be absolute seconds with an s suffix.",
+      "name": "get_audio",
+      "parameters": {
+        "properties": {
+          "start": {
+            "pattern": "^\\d+(?:\\.\\d+)?s$",
+            "type": "string",
+            "description": "Absolute seconds with an s suffix."
+          },
+          "end": {
+            "pattern": "^\\d+(?:\\.\\d+)?s$",
+            "type": "string",
+            "description": "Absolute seconds with an s suffix."
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "description": "Return sampled visual frames resized within 384x384, plus continuous audio from the same span. level=coarse samples visual frames at 1 FPS and level=detail at 2 FPS. start/end must be absolute seconds with an s suffix. resolution defaults to default. resolution=high increases spatial resolution up to 1280 pixels per side without changing the time window or sampling FPS. Use high when the answer depends on fine spatial evidence such as small or distant objects, small text or symbols, subtle hand-object interactions, or the motion or state change of a small object. A resolution=high window must be at most 5 seconds.",
+      "name": "get_clip",
+      "parameters": {
+        "properties": {
+          "start": {
+            "pattern": "^\\d+(?:\\.\\d+)?s$",
+            "type": "string",
+            "description": "Absolute seconds with an s suffix."
+          },
+          "end": {
+            "pattern": "^\\d+(?:\\.\\d+)?s$",
+            "type": "string",
+            "description": "Absolute seconds with an s suffix."
+          },
+          "level": {
+            "enum": [
+              "coarse",
+              "detail"
+            ],
+            "type": "string"
+          },
+          "resolution": {
+            "default": "default",
+            "enum": [
+              "default",
+              "high"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "level"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "description": "Return 2–8 already-localized windows together for comparison or verification. Provide spans in comparison order without names; runtime labels them span_1, span_2, etc. This tool is not for broad temporal search. clip returns frames plus same-window audio. Each visual span independently selects level and resolution. resolution=high is for fine spatial evidence and does not change the time window or sampling FPS. Across one call, use at most 256 sampled frames, 128 seconds of audio, and at most 2 high-resolution visual spans; each high-resolution span must be at most 5 seconds.",
+      "name": "get_multi_span",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "spans": {
+            "items": {
+              "oneOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "modality": {
+                      "enum": [
+                        "audio"
+                      ],
+                      "type": "string"
+                    },
+                    "start": {
+                      "pattern": "^\\d+(?:\\.\\d+)?s$",
+                      "type": "string",
+                      "description": "Absolute seconds with an s suffix."
+                    },
+                    "end": {
+                      "pattern": "^\\d+(?:\\.\\d+)?s$",
+                      "type": "string",
+                      "description": "Absolute seconds with an s suffix."
+                    }
+                  },
+                  "required": [
+                    "modality",
+                    "start",
+                    "end"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "modality": {
+                      "enum": [
+                        "frames"
+                      ],
+                      "type": "string"
+                    },
+                    "start": {
+                      "pattern": "^\\d+(?:\\.\\d+)?s$",
+                      "type": "string",
+                      "description": "Absolute seconds with an s suffix."
+                    },
+                    "end": {
+                      "pattern": "^\\d+(?:\\.\\d+)?s$",
+                      "type": "string",
+                      "description": "Absolute seconds with an s suffix."
+                    },
+                    "level": {
+                      "enum": [
+                        "coarse",
+                        "detail"
+                      ],
+                      "type": "string"
+                    },
+                    "resolution": {
+                      "default": "default",
+                      "enum": [
+                        "default",
+                        "high"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "modality",
+                    "start",
+                    "end",
+                    "level"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "modality": {
+                      "enum": [
+                        "clip"
+                      ],
+                      "type": "string"
+                    },
+                    "start": {
+                      "pattern": "^\\d+(?:\\.\\d+)?s$",
+                      "type": "string",
+                      "description": "Absolute seconds with an s suffix."
+                    },
+                    "end": {
+                      "pattern": "^\\d+(?:\\.\\d+)?s$",
+                      "type": "string",
+                      "description": "Absolute seconds with an s suffix."
+                    },
+                    "level": {
+                      "enum": [
+                        "coarse",
+                        "detail"
+                      ],
+                      "type": "string"
+                    },
+                    "resolution": {
+                      "default": "default",
+                      "enum": [
+                        "default",
+                        "high"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "modality",
+                    "start",
+                    "end",
+                    "level"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "maxItems": 8,
+            "minItems": 2,
+            "type": "array"
+          }
+        },
+        "required": [
+          "spans"
+        ],
+        "type": "object"
+      }
+    }
+  }
+]

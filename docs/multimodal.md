@@ -64,6 +64,12 @@ provides native-video and timestamped-frame policies, with explicit frame,
 resolution and audio budgets. Its cache is owned by the integration. Custom
 agents can implement media inspection tools in their own generate function.
 
+The [OmniCoach agent](../examples/omni_agent/README.md) on this branch caches
+decoded frames and audio for reuse across models. Its
+`defaults.budget.initial_frames` selects the initial view from a shared
+256-frame cache while preserving timestamps. Dynamic tools materialize extra
+media views, which are removed after each case by default.
+
 The FFmpeg and FFprobe host requirements are declared in
 `environments/tools.toml` and checked with `evalkit env check tools`. The
 frame policy remains in the user integration's own config.

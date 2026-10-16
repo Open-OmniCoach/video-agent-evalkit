@@ -1,0 +1,40 @@
+registry_path: ../../../../configs/registry.yaml
+data_root: ../../../../data
+out_dir: ../../../../runs/qwen2_5_omni_agent/predictions
+scheduler:
+  max_active_cases: 2
+model:
+  generate_fn: examples.omni_agent.generate:generate
+  endpoint:
+    service_manifest: ../../../../runs/services/qwen2_5_omni_agent.json
+    service_model: candidate
+    api_key_env: EVALKIT_API_KEY
+    media_transport: file_uri
+    timeout: 1800
+    max_inflight: 2
+    request_retries: 0
+defaults:
+  sampling:
+    temperature: 0.6
+    top_p: 0.95
+    top_k: 20
+    max_tokens: 4096
+    seed: 42
+  prompt:
+    audio: true
+  budget:
+    initial_frames: 96
+    media_cache_id: fast-2fps384-initial0p5-audio16k-v1
+    initial_audio_max_seconds: 3300
+    max_context_tokens: 131072
+    max_turns: 32
+    max_invalid_retries: 3
+  scoring:
+    type: rule
+  idempotent: true
+retry:
+  case_max_attempts: 1
+flush_every: 1
+trajectory: trainable
+eval_datasets:
+  - name: lvomnibench

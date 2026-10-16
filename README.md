@@ -11,6 +11,10 @@ already recorded.
 The Python package and command remain `evalkit` for compatibility with existing
 configs and integrations.
 
+This is the `codex/omnicoach` integration branch. It includes the trained
+[OmniCoach agent](examples/omni_agent/README.md) on top of VAE's shared runner
+and template. Use `main` for the general-purpose toolkit.
+
 ## What It Is For
 
 Use evalkit to:
@@ -49,6 +53,7 @@ uv --version
 ```bash
 git clone https://github.com/Kagura-0001/video-agent-evalkit.git
 cd video-agent-evalkit
+git switch codex/omnicoach
 uv sync --locked
 source .venv/bin/activate
 ```
@@ -166,8 +171,14 @@ your own model or agent. Run source-only examples from the repository root with
 | --- | --- | --- |
 | [Integration template](examples/_template/README.md) | Custom `generate` function and a three-question smoke run | Existing API or vLLM |
 | [Qwen3-Omni Instruct](examples/qwen3_omni_instruct/README.md) | Original Instruct baseline, single-turn native video or timestamped frames, 64K context | vLLM |
+| [OmniCoach / Qwen2.5-Omni](examples/omni_agent/configs/qwen2_5_omni/run.yaml) | Trained 7B agent, 96 initial frames, 128K context | vLLM |
+| [OmniCoach / Qwen3-Omni](examples/omni_agent/configs/qwen3_omni/run.yaml) | Trained 30B-A3B agent, up to 256 initial frames, 64K context | SGLang |
 
 Instruct owns its media protocols and `QWEN3_OMNI_MEDIA_CACHE_DIR` cache.
+The trained agents share `examples.omni_agent.generate:generate`, decoded media
+and `OMNI_AGENT_*` environment variables. Follow the
+[OmniCoach setup guide](examples/omni_agent/README.md) for checkpoints, model
+configs and cache settings.
 Examples and their static assets run from the source checkout; the wheel installs
 only the `evalkit` library and CLI.
 
@@ -215,6 +226,7 @@ evalkit/generate/           built-in single-turn and reference agent generation
 evalkit/serve/              local backend process supervisor
 environments/               locked, isolated backend projects
 examples/_template/         starter integration with run and optional serve configs
+examples/omni_agent/        OmniCoach agent, model configs and chat templates
 examples/qwen3_omni_instruct/ single-turn Instruct baseline and benchmark recipes
 tests/                      unit tests, also runnable as scripts
 ```

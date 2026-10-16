@@ -154,6 +154,12 @@ Start a new integration from [`examples/_template/`](../examples/_template/READM
 and implement its tool loop in `generate.py`. The template starts with one chat
 request; add the prompts, tools and turn budget required by your agent.
 
+On this branch, [`examples/omni_agent/`](../examples/omni_agent/README.md)
+provides the trained OmniCoach loop. Qwen2.5 and Qwen3 share its
+`examples.omni_agent.generate:generate` entry point, tools and media cache.
+Their YAML configs select frame budgets and serving parameters; their chat
+templates preserve each model's message format.
+
 ## Trajectories
 
 Non-empty trajectories are written to
