@@ -1,0 +1,32 @@
+registry_path: ../../../../configs/registry.yaml
+data_root: ../../../../data
+out_dir: ../../../../runs/qwen3-omni-instruct-worldsense-images-audio-1fps-256f-384px
+
+scheduler:
+  max_active_cases: 48
+
+model:
+  generate_fn: examples.qwen3_omni_instruct.local_video:generate_timestamped_images
+  endpoint:
+    service_manifest: ../../../../runs/services/qwen3-omni-instruct.json
+    service_model: candidate
+    api_key: EMPTY
+    media_transport: file_uri
+    timeout: 1800
+    max_inflight: 48
+    request_retries: 3
+
+defaults:
+  sampling: {temperature: 0, max_tokens: 64}
+  prompt: {audio: on}
+  budget: {}
+  scoring: {type: rule}
+  idempotent: true
+
+retry:
+  case_max_attempts: 2
+
+flush_every: 20
+
+eval_datasets:
+  - name: worldsense

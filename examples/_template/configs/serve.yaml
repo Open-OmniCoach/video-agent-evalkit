@@ -1,0 +1,18 @@
+manifest_path: ../../../runs/services/template.json
+working_dir: ../../..
+host: 0.0.0.0
+advertise_host: 127.0.0.1
+
+models:
+  candidate:
+    backend: vllm
+    model: /path/to/model
+    served_model_name: candidate
+    adapter: vllm_multimodal
+    args:
+      - --allowed-local-media-path
+      - data
+      - --enable-prefix-caching
+    replicas:
+      - gpus: [0]
+        port: 8000

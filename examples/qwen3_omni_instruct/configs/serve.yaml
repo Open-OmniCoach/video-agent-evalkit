@@ -1,0 +1,38 @@
+manifest_path: ../../../runs/services/qwen3-omni-instruct.json
+working_dir: ../../..
+host: 0.0.0.0
+advertise_host: 127.0.0.1
+startup_timeout: 1800
+terminate_timeout: 30
+
+models:
+  candidate:
+    backend: vllm
+    model: Qwen/Qwen3-Omni-30B-A3B-Instruct
+    served_model_name: qwen3-omni-instruct
+    adapter: vllm_multimodal
+    env:
+      VLLM_MAX_AUDIO_DECODE_DURATION_S: "3600"
+    args:
+      - --tensor-parallel-size
+      - "2"
+      - --dtype
+      - bfloat16
+      - --max-model-len
+      - "65536"
+      - --gpu-memory-utilization
+      - "0.85"
+      - --max-num-seqs
+      - "2"
+      - --skip-mm-profiling
+      - --limit-mm-per-prompt
+      - '{"image":256,"audio":1,"video":1}'
+      - --mm-processor-kwargs
+      - '{"audio_truncation":false}'
+      - --mm-processor-cache-gb
+      - "0"
+      - --allowed-local-media-path
+      - ${QWEN3_OMNI_MEDIA_CACHE_DIR}
+    replicas:
+      - gpus: [0, 1]
+        port: 8000

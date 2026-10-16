@@ -1,0 +1,56 @@
+registry_path: ../../../../configs/registry.yaml
+data_root: ../../../../data
+out_dir: ../../../../runs/qwen3-omni-instruct-smoke
+
+scheduler:
+  max_active_cases: 8
+
+model:
+  generate_fn: examples.qwen3_omni_instruct.generate:generate
+  endpoint:
+    service_manifest: ../../../../runs/services/qwen3-omni-instruct.json
+    service_model: candidate
+    api_key: EMPTY
+    media_transport: file_uri
+    timeout: 1800
+    max_inflight: 8
+    request_retries: 3
+    extra_body:
+      media_io_kwargs:
+        video: {fps: 1, max_frames: 256}
+      mm_processor_kwargs:
+        fps: 1
+        max_frames: 256
+        min_pixels: 131072
+        max_pixels: 147456
+        use_audio_in_video: false
+
+defaults:
+  sampling: {temperature: 0, max_tokens: 64}
+  prompt: {audio: on}
+  budget: {}
+  scoring: {type: rule}
+  idempotent: true
+
+retry:
+  case_max_attempts: 2
+
+flush_every: 5
+
+eval_datasets:
+  - name: dailyomni
+    limit: 5
+  - name: omnivideobench
+    generate_fn: examples.qwen3_omni_instruct.long_video:generate
+    budget: {max_media_seconds: 3500}
+    limit: 5
+  - name: lvomnibench
+    generate_fn: examples.qwen3_omni_instruct.long_video:generate
+    budget: {max_media_seconds: 3500}
+    limit: 5
+  - name: worldsense
+    generate_fn: examples.qwen3_omni_instruct.local_video:generate_timestamped_images
+    limit: 5
+  - name: timelens_bench
+    sampling: {max_tokens: 8192}
+    limit: 5

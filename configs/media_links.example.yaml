@@ -1,0 +1,14 @@
+# Example media-link manifest for `evalkit data link`.
+#
+# Set EVALKIT_COMMON_BENCHMARKS to your shared benchmark store, then run:
+#   evalkit data link --data-root data --manifest configs/media_links.example.yaml
+#
+# Keys are symlink paths relative to data_root. Values are targets under
+# common_root unless they are absolute paths.
+common_root: ${EVALKIT_COMMON_BENCHMARKS}
+links:
+  benchmarks/Daily-Omni: Daily-Omni
+  benchmarks/LVBench/videos: LVBench/video_chunks
+  benchmarks/Video-MME/videos: Video-MME/video
+  benchmarks/OmniVideoBench: OmniVideoBench
+  benchmarks/WorldSense: WorldSense

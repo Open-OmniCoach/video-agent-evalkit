@@ -1,0 +1,191 @@
+# Benchmark registry. Paths are relative to `data_root` (set in the run config;
+# defaults to the registry file's directory). Canonical prepared data uses
+# `annotation: annotations/<bench>.json` and `video_dir: benchmarks/<Bench>`.
+# Optional fields such as `source_path` are data-prep provenance, not runtime
+# label sources. See docs/data.md.
+sample_mcq:
+  annotation: sample_mcq.jsonl
+  video_dir: .
+  status: ready
+  report:
+    breakdowns:
+      - name: topic
+        key: facets.topic
+      - name: difficulty
+        key: facets.difficulty
+
+omnivideobench:
+  annotation: annotations/omnivideobench.json
+  video_dir: benchmarks/OmniVideoBench
+  status: ready
+  source_format: parquet
+  source_path: benchmarks/OmniVideoBench/data.parquet
+  scoring_protocol: official_mc_accuracy
+  report:
+    breakdowns:
+      - name: task
+        key: facets.task
+      - name: audio_type
+        key: facets.audio_type
+      - name: video_type
+        key: facets.video_type
+
+omnivideo_test_full:
+  annotation: annotations/omnivideo_test_full.json
+  video_dir: benchmarks/OmniVideo-Test
+  status: ready
+  source_format: jsonl
+  source_path: benchmarks/OmniVideo-Test/test_505.jsonl
+  scoring_protocol: full_mc_accuracy
+  report:
+    breakdowns:
+      - name: task
+        key: facets.task
+      - name: subtask
+        key: facets.subtask
+  source_counts:
+    questions: 505
+    source_videos: 264
+
+jointavbench_full:
+  annotation: annotations/jointavbench_full.json
+  video_dir: benchmarks/JointAVBench
+  status: ready
+  source_format: json
+  source_path: benchmarks/JointAVBench/jointavbench.json
+  scoring_protocol: full_mc_accuracy_shuffle42_exclude9_deprecated
+  report:
+    breakdowns:
+      - name: task
+        key: facets.task
+      - name: scene_type
+        key: facets.scene_type
+      - name: cognitive_type
+        key: facets.cognitive_type
+  source_counts:
+    raw_questions: 2853
+    evaluation_questions: 2844
+
+video_mme_full:
+  annotation: annotations/video_mme_full.json
+  video_dir: benchmarks/Video-MME
+  status: ready
+  source_format: parquet
+  source_path: benchmarks/Video-MME/videomme/test-00000-of-00001.parquet
+  scoring_protocol: full_mc_accuracy_no_external_subtitles
+  report:
+    breakdowns:
+      - name: task
+        key: facets.task
+      - name: domain
+        key: facets.domain
+      - name: sub_category
+        key: facets.sub_category
+  source_counts:
+    questions: 2700
+    videos: 900
+
+video_mme_v2_full:
+  annotation: annotations/video_mme_v2_full.json
+  video_dir: benchmarks/Video-MME-v2
+  status: ready
+  source_format: parquet
+  source_path: benchmarks/Video-MME-v2/test.parquet
+  scoring_protocol: full_official_grouped_rating_no_external_subtitles
+  report:
+    breakdowns:
+      - name: group_type
+        key: facets.group_type
+      - name: level
+        key: facets.level
+      - name: second_head
+        key: facets.second_head
+      - name: third_head
+        key: facets.third_head
+  source_counts:
+    questions: 3200
+    videos: 800
+
+futureomni_full:
+  annotation: annotations/futureomni_full.json
+  video_dir: benchmarks/FutureOmni
+  status: ready
+  source_format: json
+  source_path: benchmarks/FutureOmni/futureomni_test.json
+  scoring_protocol: full_mc_accuracy
+  report:
+    breakdowns:
+      - name: domain
+        key: facets.domain
+      - name: audio_type
+        key: facets.audio_type
+      - name: forecasting_pattern
+        key: facets.forecasting_pattern
+      - name: duration
+        key: facets.duration
+  source_counts:
+    questions: 1034
+
+lvomnibench:
+  annotation: annotations/lvomnibench.json
+  video_dir: benchmarks/LVOmniBench
+  status: ready
+  source_format: json
+  source_path: benchmarks/LVOmniBench/data.json
+  scoring_protocol: official_mc_accuracy
+  report:
+    breakdowns:
+      - name: task
+        key: facets.task
+      - name: difficulty
+        key: facets.difficulty
+      - name: audio_type
+        key: facets.audio_type
+      - name: video_category
+        key: facets.video_category
+
+timelens_bench:
+  annotation: annotations/timelens_bench.json
+  video_dir: benchmarks/TimeLens-Bench
+  status: ready
+  source_format: json_directory
+  source_path: benchmarks/TimeLens-Bench
+  scoring_protocol: temporal_grounding_miou_r1
+  report:
+    breakdowns:
+      - name: source_dataset
+        key: facets.source_dataset
+
+worldsense:
+  annotation: annotations/worldsense.json
+  video_dir: benchmarks/WorldSense
+  status: ready
+  source_format: json
+  source_path: benchmarks/WorldSense/worldsense_qa.json
+  scoring_protocol: official_mc_accuracy
+  report:
+    breakdowns:
+      - name: task
+        key: facets.task
+      - name: task_domain
+        key: facets.task_domain
+      - name: domain
+        key: facets.domain
+      - name: sub_category
+        key: facets.sub_category
+      - name: duration
+        key: facets.duration
+
+dailyomni:
+  annotation: annotations/dailyomni.json
+  video_dir: benchmarks/Daily-Omni/Videos
+  status: ready
+  source_format: json
+  source_path: benchmarks/Daily-Omni/qa.json
+  scoring_protocol: non_official_simple_mc_accuracy
+  report:
+    breakdowns:
+      - name: task
+        key: facets.task
+      - name: duration
+        key: facets.duration

@@ -1,0 +1,17 @@
+[tools.ffmpeg]
+command = ["static_ffmpeg", "ffmpeg"]
+env_override = "EVALKIT_FFMPEG"
+version_args = ["-version"]
+version_regex = '^ffmpeg version n?(?P<version>[0-9]+(?:\.[0-9]+)*)'
+minimum_version = "5.1"
+probe_timeout_seconds = 660
+install_hint = "Run `uv sync --locked` (media group) and `evalkit env sync tools`, install FFmpeg on PATH, or set EVALKIT_FFMPEG."
+
+[tools.ffprobe]
+command = ["static_ffprobe", "ffprobe"]
+env_override = "EVALKIT_FFPROBE"
+version_args = ["-version"]
+version_regex = '^ffprobe version n?(?P<version>[0-9]+(?:\.[0-9]+)*)'
+minimum_version = "5.1"
+probe_timeout_seconds = 660
+install_hint = "Run `uv sync --locked` (media group) and `evalkit env sync tools`, install FFmpeg on PATH, or set EVALKIT_FFPROBE."

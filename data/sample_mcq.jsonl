@@ -1,0 +1,3 @@
+{"problem_id": "mcq_1", "problem_type": "multiple choice", "problem": "What is 2 + 2?", "options": ["A. 3", "B. 4", "C. 5", "D. 6"], "solution": "<answer>B</answer>", "facets": {"topic": "math", "difficulty": "easy"}}
+{"problem_id": "mcq_2", "problem_type": "multiple choice", "problem": "Which animal barks?", "options": ["A. Cat", "B. Cow", "C. Dog", "D. Fish"], "solution": "<answer>C</answer>", "facets": {"topic": "science", "difficulty": "easy"}}
+{"problem_id": "num_1", "problem_type": "numerical", "problem": "How many days are in a week?", "solution": "<answer>7</answer>", "facets": {"topic": "calendar", "difficulty": "easy"}}

@@ -1,0 +1,39 @@
+registry_path: ../../../configs/registry.yaml
+data_root: ../../../data
+out_dir: ../../../runs/template
+
+scheduler:
+  max_active_cases: 32
+
+model:
+  generate_fn: examples._template.generate:generate
+  endpoint:
+    base_url: http://127.0.0.1:8000/v1
+    model: candidate
+    api_key_env: MODEL_API_KEY
+    media_transport: file_uri
+    timeout: 600
+    max_inflight: 32
+    request_retries: 2
+
+# A judge is another logical OpenAI-compatible model.
+# aux_models:
+#   judge:
+#     endpoint:
+#       base_url: https://api.example.com/v1
+#       api_key_env: JUDGE_API_KEY
+#       model: judge-model
+
+defaults:
+  sampling: {temperature: 0, max_tokens: 512}
+  budget: {}
+  scoring: {type: rule}
+  idempotent: true
+
+retry:
+  case_max_attempts: 2
+
+flush_every: 20
+
+eval_datasets:
+  - name: sample_mcq
