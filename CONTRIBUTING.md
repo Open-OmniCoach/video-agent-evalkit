@@ -4,7 +4,7 @@ Video Agent EvalKit (VAE) is developed at
 <https://github.com/Kagura-0001/video-agent-evalkit>. The `main`
 branch is the portable evaluation core: contributions should work without
 access to a particular shared filesystem, model checkpoint, or GPU cluster.
-The `codex/omnicoach` branch adds the OmniCoach integration. Develop shared
+The `omnicoach` branch adds the OmniCoach integration. Develop shared
 runner changes on `main` and merge them into the integration branch.
 
 ## Development setup

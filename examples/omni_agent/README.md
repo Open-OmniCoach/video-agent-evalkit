@@ -21,7 +21,7 @@ attempts and three transport retries. Truncated responses remain terminal.
 
 ## Prepare
 
-Use the `codex/omnicoach` branch and run from the repository root on a Linux host:
+Use the `omnicoach` branch and run from the repository root on a Linux host:
 
 ```bash
 uv sync --locked

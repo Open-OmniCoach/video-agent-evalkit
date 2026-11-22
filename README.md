@@ -11,7 +11,7 @@ already recorded.
 The Python package and command remain `evalkit` for compatibility with existing
 configs and integrations.
 
-This is the `codex/omnicoach` integration branch. It includes the trained
+This is the `omnicoach` integration branch. It includes the trained
 [OmniCoach agent](examples/omni_agent/README.md) on top of VAE's shared runner
 and template. Use `main` for the general-purpose toolkit.
 
@@ -53,7 +53,7 @@ uv --version
 ```bash
 git clone https://github.com/Kagura-0001/video-agent-evalkit.git
 cd video-agent-evalkit
-git switch codex/omnicoach
+git switch omnicoach
 uv sync --locked
 source .venv/bin/activate
 ```
@@ -237,7 +237,7 @@ the benchmark registry is shared.
 ## Repository Scope
 
 `main` contains the runner, documentation, a synthetic sample, the integration
-template and the Qwen3-Omni Instruct baseline. `codex/omnicoach` extends it with
+template and the Qwen3-Omni Instruct baseline. `omnicoach` extends it with
 the trained OmniCoach agent, model configs, chat templates and agent tests.
 The repository, including both branches, is private during preparation.
 Model checkpoints, benchmark annotations and media,
