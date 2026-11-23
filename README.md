@@ -1,45 +1,47 @@
+<div align="center">
+
+<img src="docs/assets/logo.png" alt="Video Agent EvalKit Logo" width="128"/>
+
 # Video Agent EvalKit (VAE)
 
-Video Agent EvalKit (VAE) evaluates video agents and multimodal models across
-benchmarks with text, image, video and audio questions. Its `evalkit` runner calls
-models served through an OpenAI-compatible chat API. It loads
-normalized benchmark cases, calls your model or agent, scores each answer with
-the benchmark's own scorer, and writes per-case predictions, optional
-trajectories and summary metrics. An interrupted run resumes from the cases it
-already recorded.
+### Unified Evaluation Toolkit for Video Agents and Multimodal Models
 
-The Python package and command remain `evalkit` for compatibility with existing
-configs and integrations.
+<p>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/Python-%E2%89%A53.11-3776AB?logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://docs.astral.sh/uv/"><img src="https://img.shields.io/badge/uv-0.11.28-DE5FE9?logo=uv&logoColor=white" alt="uv"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="License"></a>
+  <a href="https://github.com/Open-OmniCoach/omnicoach"><img src="https://img.shields.io/badge/Open--OmniCoach-Codebase-181717?logo=github" alt="Open-OmniCoach"></a>
+  <a href="https://huggingface.co/Open-OmniCoach/Open-OmniAgent-30B-A3B"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Model-Open--OmniAgent_30B-F59E0B" alt="HF 30B"></a>
+  <a href="https://huggingface.co/Open-OmniCoach/Open-OmniAgent-7B"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Model-Open--OmniAgent_7B-3B82F6" alt="HF 7B"></a>
+</p>
 
-This is the `omnicoach` integration branch. It includes the trained
-[OmniCoach agent](examples/omni_agent/README.md) on top of VAE's shared runner
-and template. Use `main` for the general-purpose toolkit.
+</div>
 
-## What It Is For
+> **Video Agent EvalKit (VAE)** evaluates video agents and multimodal models across benchmarks with text, image, video, and audio questions. Its `evalkit` runner calls models served over an OpenAI-compatible chat API, loads normalized benchmark cases, scores answers with each benchmark's own scorer, and writes per-case predictions, optional trajectories, and summary metrics—with automatic resume after interruptions.
 
-Use evalkit to:
+The Python package and command remain `evalkit` for compatibility with existing configs and integrations. This is the **`omnicoach`** integration branch, which adds the trained [OmniCoach agent](examples/omni_agent/README.md) (`Open-OmniAgent-7B` and `Open-OmniAgent-30B-A3B`) on top of VAE's shared runner and template; see [`main`](https://github.com/Open-OmniCoach/video-agent-evalkit/tree/main) for the general-purpose core toolkit.
 
-- score a checkpoint, a hosted model or an agent on registered benchmarks, with
-  the same normalized data and scorers for every model;
-- run long evaluations with bounded concurrency across one or more replicas,
-  and resume after an interruption;
-- keep agent trajectories, optionally including every model request and
-  response for training use.
+<p align="center">
+  <img src="docs/assets/evalkit-workflow.svg" alt="Video Agent EvalKit Workflow" width="100%"/>
+</p>
 
-evalkit does not train models, download benchmark data or host results. Model
-weights, benchmark annotations and media stay outside the repository; only a
-three-question text sample ships in `data/`.
+## Key Capabilities
+
+- **Normalized benchmarks & scorers**: Score a checkpoint, hosted API, or custom multi-turn agent across registered benchmarks with consistent normalized data and scorers.
+- **Resumable bounded concurrency**: Run long evaluations across one or more replicas with bounded active cases and automatic resume from recorded predictions.
+- **Trajectory artifact capture**: Save per-turn agent trajectories and optional raw model exchanges (`trajectory: trainable`) alongside predictions for downstream analysis or training.
+- **Clear separation of concerns**: `evalkit` is an evaluation runner—it does not train models, download benchmark datasets, or host results. Model weights, benchmark annotations, and raw media stay outside the repository (only a 3-question text sample ships in `data/`).
 
 ## Requirements
 
 | Requirement | Notes |
 | --- | --- |
-| Python 3.11 or newer | `.python-version` selects 3.12 for uv. |
-| uv 0.11.28, exactly | Every `pyproject.toml` sets `required-version = "==0.11.28"`; other uv versions refuse to sync. |
-| A model endpoint | An existing OpenAI-compatible `/v1/chat/completions` service, or NVIDIA GPUs for a local vLLM, SGLang or vLLM-Omni backend. |
-| Benchmark files | Obtained from each benchmark's own release; see [docs/data.md](docs/data.md). Not needed for the bundled sample. |
+| Python 3.11 or newer | `.python-version` selects 3.12 for `uv`. |
+| `uv == 0.11.28` | Every `pyproject.toml` sets `required-version = "==0.11.28"`; other `uv` versions refuse to sync. |
+| Model endpoint | An existing OpenAI-compatible `/v1/chat/completions` service, or NVIDIA GPUs for a local vLLM, SGLang, or vLLM-Omni backend. |
+| Benchmark files | Obtained from each benchmark's official release; see [docs/data.md](docs/data.md). Not required for the bundled sample. |
 
-Install the pinned uv version:
+Install the pinned `uv` version:
 
 ```bash
 curl -LsSf https://astral.sh/uv/0.11.28/install.sh | sh
@@ -48,10 +50,10 @@ uv self update 0.11.28
 uv --version
 ```
 
-## Install
+## Installation
 
 ```bash
-git clone https://github.com/Kagura-0001/video-agent-evalkit.git
+git clone https://github.com/Open-OmniCoach/video-agent-evalkit.git
 cd video-agent-evalkit
 git switch omnicoach
 uv sync --locked
@@ -60,37 +62,27 @@ source .venv/bin/activate
 
 `uv sync --locked` installs:
 
-- the `evalkit` package and CLI, whose only runtime dependencies are `httpx`
-  and `PyYAML`;
-- the default `media` dependency group: `static-ffmpeg` (user-space
-  FFmpeg/FFprobe), Pillow, and Decord (Decord wheels exist only for Linux
-  x86_64 and Windows x86_64). Skip the group with `uv sync --locked --no-group media`
-  when the model service reads media paths or URLs itself.
+- the `evalkit` package and CLI, whose only runtime dependencies are `httpx` and `PyYAML`;
+- the default `media` dependency group: `static-ffmpeg` (user-space FFmpeg/FFprobe), Pillow, and Decord (Decord wheels exist only for Linux `x86_64` and Windows `x86_64`; skip with `uv sync --locked --no-group media` when the model service reads media paths or URLs directly).
 
-Two extras are optional: `convert` (pandas, pyarrow) for
-`evalkit data convert`, and `test` (pytest).
+Two extras are optional: `convert` (`pandas`, `pyarrow`) for `evalkit data convert`, and `test` (`pytest`).
 
-Integrations that process media on the evaluation host need FFmpeg and FFprobe:
+Integrations that process media on the evaluation host need FFmpeg and FFprobe (checked against `environments/tools.toml`):
 
 ```bash
 evalkit env sync tools
 ```
 
-This checks the commands and minimum versions in `environments/tools.toml`.
-
-Local backends have separate locked environments. Install the backend selected
-by your example's serve configuration:
+Local serving backends use isolated locked environments under `environments/`. Install the backend selected by your serve config:
 
 ```bash
 evalkit env sync vllm
-# Other configurations can select the sglang or vllm-omni environment.
+# Other configurations select sglang or vllm-omni.
 ```
 
-## Quick Start With The Bundled Sample
+## Quick Start (Bundled Sample)
 
-`configs/registry.yaml` registers `sample_mcq`, three text-only questions in
-[`data/sample_mcq.jsonl`](data/sample_mcq.jsonl). Write a run YAML that points
-`model.endpoint` at your OpenAI-compatible service:
+`configs/registry.yaml` registers `sample_mcq`, three text-only questions in [`data/sample_mcq.jsonl`](data/sample_mcq.jsonl). Create a run config pointing `model.endpoint` at an OpenAI-compatible service:
 
 ```yaml
 registry_path: configs/registry.yaml
@@ -112,13 +104,13 @@ eval_datasets:
   - name: sample_mcq
 ```
 
-Then run:
+Run evaluation:
 
 ```bash
 evalkit run --config my_run.yaml
 ```
 
-## Results
+### Output Structure & Resume
 
 With `out_dir: runs/sample`:
 
@@ -128,20 +120,14 @@ runs/sample/
   sample_mcq/
     predictions.jsonl           one JSON row per case; also the resume checkpoint
     summary.json                n_total, n_failed, n_unscored, wall_seconds, metrics
-    artifacts/trajectories/     only for cases whose generator returned events
+    artifacts/trajectories/     created only when a generator emits trajectory events
 ```
 
-Each `predictions.jsonl` row records `uid`, `status`, the raw `response`, the
-parsed `prediction`, `score`, `score_details`, `error`, `facets`, `generation`
-(usage, timing, endpoint and finish reason) and `trajectory_artifact`.
+Each `predictions.jsonl` row records `uid`, `status`, raw `response`, parsed `prediction`, `score`, `score_details`, `error`, `facets`, `generation` (usage, timing, endpoint, and finish reason), and `trajectory_artifact`. Re-running the same config skips already recorded UIDs, including failed cases—use a new `out_dir` for a different model or configuration. See [docs/reporting.md](docs/reporting.md) for per-category breakdowns.
 
-Running the same config again skips every recorded UID, including failed cases.
-Use a new `out_dir` for a different model or setting.
-[docs/reporting.md](docs/reporting.md) explains per-category breakdowns.
+## Evaluating Real Benchmarks
 
-## Evaluate Real Benchmarks
-
-Prepare benchmark data once per data root:
+Prepare benchmark annotations and media symlinks once per data root:
 
 ```bash
 uv sync --locked --extra convert
@@ -153,40 +139,24 @@ evalkit data convert omnivideobench omnivideo_test_full jointavbench_full \
 evalkit data validate --data-root data --registry-path configs/registry.yaml
 ```
 
-`data link` symlinks media you already have into `data/` from a manifest
-([`configs/media_links.example.yaml`](configs/media_links.example.yaml) shows
-the format). Converters read each benchmark's original annotation files and
-write `data/annotations/<benchmark>.json` and the matching registry entry.
-[docs/data.md](docs/data.md) lists the source layout every converter expects.
+`data link` symlinks local media into `data/` from a manifest ([`configs/media_links.example.yaml`](configs/media_links.example.yaml)). Converters read original benchmark annotations into `data/annotations/<benchmark>.json` and update the registry. See [docs/data.md](docs/data.md) for expected source layouts, then list target benchmarks under `eval_datasets` in your run config.
 
-Then list the benchmarks under `eval_datasets` in your run config.
+## Model and Agent Examples
 
-## Model And Agent Examples
+Run examples from the repository root with `evalkit run` (the wheel installs only `evalkit`, not top-level `examples/`). Model weights and benchmark data are supplied separately:
 
-Start with the [integration template](examples/_template/README.md) to connect
-your own model or agent. Run source-only examples from the repository root with
-`evalkit run`. Model weights and benchmark data are supplied separately.
-
-| Example | Purpose | Local backend |
+| Example | Purpose | Local Backend |
 | --- | --- | --- |
-| [Integration template](examples/_template/README.md) | Custom `generate` function and a three-question smoke run | Existing API or vLLM |
-| [Qwen3-Omni Instruct](examples/qwen3_omni_instruct/README.md) | Original Instruct baseline, single-turn native video or timestamped frames, 64K context | vLLM |
-| [OmniCoach / Qwen2.5-Omni](examples/omni_agent/configs/qwen2_5_omni/run.yaml) | Trained 7B agent, 96 initial frames, 128K context | vLLM |
-| [OmniCoach / Qwen3-Omni](examples/omni_agent/configs/qwen3_omni/run.yaml) | Trained 30B-A3B agent, up to 256 initial frames, 64K context | SGLang |
+| [Integration template](examples/_template/README.md) | Custom `generate` function and 3-question smoke config | Existing API or vLLM |
+| [Qwen3-Omni Instruct](examples/qwen3_omni_instruct/README.md) | Single-turn Instruct baseline (native video or timestamped frames, 64K context) | vLLM |
+| [OmniCoach / Qwen2.5-Omni](examples/omni_agent/configs/qwen2_5_omni/run.yaml) | Trained [`Open-OmniAgent-7B`](https://huggingface.co/Open-OmniCoach/Open-OmniAgent-7B) agent, 96 initial frames, 128K context | vLLM |
+| [OmniCoach / Qwen3-Omni](examples/omni_agent/configs/qwen3_omni/run.yaml) | Trained [`Open-OmniAgent-30B-A3B`](https://huggingface.co/Open-OmniCoach/Open-OmniAgent-30B-A3B) agent, up to 256 initial frames, 64K context | SGLang |
 
-Instruct owns its media protocols and `QWEN3_OMNI_MEDIA_CACHE_DIR` cache.
-The trained agents share `examples.omni_agent.generate:generate`, decoded media
-and `OMNI_AGENT_*` environment variables. Follow the
-[OmniCoach setup guide](examples/omni_agent/README.md) for checkpoints, model
-configs and cache settings.
-Examples and their static assets run from the source checkout; the wheel installs
-only the `evalkit` library and CLI.
+`examples/qwen3_omni_instruct` owns its media protocols and `QWEN3_OMNI_MEDIA_CACHE_DIR` cache. The trained OmniCoach agents share `examples.omni_agent.generate:generate`, decoded media, and `OMNI_AGENT_*` environment variables; see the [OmniCoach setup guide](examples/omni_agent/README.md) for checkpoints, serving configs, and cache settings.
 
-## Use Your Own Model Or Agent
+## Bring Your Own Model or Agent
 
-By default `evalkit.generate.openai_chat:generate` sends each case's messages to
-the `candidate` model once. For prompts, tools, multi-turn agents or media
-preprocessing, point `model.generate_fn` at your own async function:
+By default `evalkit.generate.openai_chat:generate` sends each case once. For custom prompts, tool loops, multi-turn agents, or bespoke media preprocessing, point `model.generate_fn` at an async generator:
 
 ```yaml
 model:
@@ -198,18 +168,16 @@ async def generate(runtime, case, sampling) -> GenerationResult:
     ...
 ```
 
-The generator owns prompts, tools and the final response; scoring stays with
-the benchmark. Read [docs/adding-a-model.md](docs/adding-a-model.md), which also
-covers run configuration, retries and trajectories.
+The generator owns prompts, tools, and the final response; scoring remains decoupled in the benchmark scorer. Read [docs/adding-a-model.md](docs/adding-a-model.md) for configuration, retries, and trajectory schemas.
 
 ## Documentation
 
-| To | Read |
+| Topic | Guide |
 | --- | --- |
-| Add a model or agent, configure a run, record trajectories | [docs/adding-a-model.md](docs/adding-a-model.md) |
+| Add a model/agent, configure runs, record trajectories | [docs/adding-a-model.md](docs/adding-a-model.md) |
 | Prepare benchmark data and the registry | [docs/data.md](docs/data.md) |
 | Serve models, route across replicas, configure endpoints | [docs/serving.md](docs/serving.md) |
-| Send video, audio or extracted frames | [docs/multimodal.md](docs/multimodal.md) |
+| Send video, audio, or extracted frames | [docs/multimodal.md](docs/multimodal.md) |
 | Understand rule scoring and LLM judges | [docs/scoring.md](docs/scoring.md) |
 | Break metrics down by category | [docs/reporting.md](docs/reporting.md) |
 | Evaluate a subset without copying data | [docs/subsets.md](docs/subsets.md) |
@@ -217,39 +185,35 @@ covers run configuration, retries and trajectories.
 ## Repository Layout
 
 ```text
-configs/registry.yaml       global benchmark and data registry
-data/                       normalized annotations and linked raw media
-docs/                       guides, reference and design records
-evalkit/bench/              loading, rule scoring, aggregation, resume
-evalkit/runtime/            bounded scheduler, transport, routing, judge scoring
-evalkit/generate/           built-in single-turn and reference agent generation
-evalkit/serve/              local backend process supervisor
-environments/               locked, isolated backend projects
-examples/_template/         starter integration with run and optional serve configs
-examples/omni_agent/        OmniCoach agent, model configs and chat templates
-examples/qwen3_omni_instruct/ single-turn Instruct baseline and benchmark recipes
-tests/                      unit tests, also runnable as scripts
+configs/registry.yaml          Global benchmark & data registry
+data/                          Normalized annotations & linked raw media (sample_mcq included)
+docs/                          Guides, reference docs & workflow assets
+environments/                  Locked, isolated serving backend environments (vllm, sglang, vllm-omni)
+evalkit/
+  bench/                       Loaders, rule scoring, aggregation, resume
+  runtime/                     Bounded scheduler, HTTP transport, routing, judge scoring
+  generate/                    Built-in single-turn & reference agent generators
+  serve/                       Local backend process supervisor
+examples/
+  _template/                   Starter integration with run & optional serve configs
+  omni_agent/                  Trained OmniCoach agent, model configs & chat templates
+  qwen3_omni_instruct/         Single-turn Instruct baseline & benchmark recipes
+tests/                         Unit tests (also directly executable scripts)
 ```
 
-`configs/` intentionally has no global run config. A run is model/agent-specific;
-the benchmark registry is shared.
+`configs/` intentionally omits a global run config: runs are model/agent-specific while the benchmark registry is shared.
 
-## Repository Scope
+## Branches & Scope
 
-`main` contains the runner, documentation, a synthetic sample, the integration
-template and the Qwen3-Omni Instruct baseline. `omnicoach` extends it with
-the trained OmniCoach agent, model configs, chat templates and agent tests.
-The repository, including both branches, is private during preparation.
-Model checkpoints, benchmark annotations and media,
-credentials, service manifests, full prediction artifacts and host-specific
-cluster profiles stay outside Git.
+- **[`main`](https://github.com/Open-OmniCoach/video-agent-evalkit/tree/main)**: Portable evaluation core, documentation, bundled `sample_mcq`, integration template, and Qwen3-Omni Instruct baseline.
+- **`omnicoach`**: Extends `main` with trained Open-OmniCoach agents (`examples/omni_agent/`), model configs, chat templates, and agent unit tests.
 
-## Help And Contributing
+Model checkpoints, benchmark annotations and media, credentials, service manifests, full prediction artifacts, and host-specific cluster profiles stay outside Git.
 
-Report problems and propose changes through the repository at
-<https://github.com/Kagura-0001/video-agent-evalkit>. [CONTRIBUTING.md](CONTRIBUTING.md)
-covers development setup, tests and the repository boundary.
+## Contributing
+
+Report issues and propose changes at <https://github.com/Open-OmniCoach/video-agent-evalkit>. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, test commands, and repository boundaries.
 
 ## License
 
-MIT; see [LICENSE](LICENSE).
+Released under the [MIT License](LICENSE).

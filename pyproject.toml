@@ -35,7 +35,7 @@ required-version = "==0.11.28"
 default-groups = ["media"]
 
 [project.urls]
-Homepage = "https://github.com/Kagura-0001/video-agent-evalkit"
+Homepage = "https://github.com/Open-OmniCoach/video-agent-evalkit"
 
 [project.scripts]
 evalkit = "evalkit.cli:main"
